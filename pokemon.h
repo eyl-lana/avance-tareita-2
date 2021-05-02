@@ -19,7 +19,7 @@ Pokedex *crear_pokedex(char *nombre, List *tipos, char *ev_prev, char *ev_post, 
 
 //void ingresar_mapas(Pokemon *pokemon, Pokedex *pokedex, List *almacenamiento, HashMap *map_pokedex, HashMap *map_pokemon, HashMap *map_id, HashMap *map_tipo, HashMap *map_region, HashMap *map_num_pokedex);
 
-void insert_map_pokedex(Pokemon *pokemon, Pokedex *pokedex, HashMap *map_pokedex);
+void insert_map_pokedex(Pokedex *pokedex, HashMap *map_pokedex);
 
 void insert_map_pokemon(Pokemon *pokemon, HashMap *map_pokemon);
 
@@ -27,13 +27,21 @@ void insert_map_id(Pokemon *pokemon, HashMap *map_id);
 
 void insert_map_tipo(Pokemon *pokemon, Pokedex *pokedex, HashMap *map_tipo);
 
-void insert_map_region(Pokemon *pokemon, Pokedex *pokedex, HashMap *map_region);
+void insert_map_region(Pokedex *pokedex, HashMap *map_region);
 
 void insert_map_num_pokedex(Pokedex *pokedex, HashMap *map_num_pokedex);
 
-void leer_lista(List *);
+void leer_lista(List *lista);
 
 void leer_mapa_pokemon(HashMap *map);
+
+void leer_mapa_pokedex(HashMap *map);
+
+void leer_mapa_tipos(HashMap *map_tipo);
+
+void leer_mapa_nombres(HashMap *map_pokemon);
+
+void leer_mapa_region(HashMap *map_region);
 
 //void atrapar_pokemon(List *almacenamiento, HashMap *map_pokedex, HashMap *map_pokemon, HashMap *map_id, HashMap *map_tipo, HashMap *map_region, HashMap *map_num_pokedex);
 

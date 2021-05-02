@@ -9,12 +9,12 @@ int main()
 {
 
 	List *almacenamiento = createList();
-	HashMap *map_pokedex = createMap(100);
-	HashMap *map_pokemon = createMap(100);
-	HashMap *map_id = createMap(100);
-	HashMap *map_tipo = createMap(100);
-	HashMap *map_region = createMap(100);
-	HashMap *map_num_pokedex = createMap(100);
+	HashMap *map_pokedex = createMap(300);
+	HashMap *map_pokemon = createMap(300);
+	HashMap *map_id = createMap(300);
+	HashMap *map_tipo = createMap(300);
+	HashMap *map_region = createMap(300);
+	HashMap *map_num_pokedex = createMap(300);
 
 	leer_archivo(almacenamiento, map_pokedex, map_pokemon, map_id, map_tipo, map_region, map_num_pokedex);
 	printf("Se leyo el archivo correctamente.\n");
