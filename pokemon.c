@@ -99,8 +99,7 @@ void leer_archivo(List *almacenamiento, HashMap *map_pokedex, HashMap *map_pokem
     char *token;
     char *id;
     char *nombre;
-    char *tipo;
-    List *list_tipos;
+    char tipo[20];
     int pc;
     int ps;
     char *sexo;
@@ -116,7 +115,7 @@ void leer_archivo(List *almacenamiento, HashMap *map_pokedex, HashMap *map_pokem
     while (fscanf(archivoEntrada, "%[^\n]s", linea) != EOF){
         fgetc(archivoEntrada);
 
-        list_tipos = createList();
+        List *list_tipos = createList();
 
         token = strtok(linea, ",");
         id = token;
@@ -125,12 +124,12 @@ void leer_archivo(List *almacenamiento, HashMap *map_pokedex, HashMap *map_pokem
         nombre = token;
 
         token = strtok(NULL, "\"");
-        tipo = token;
+        strcpy(tipo, token);
 
         token = strtok(NULL, ",");
         if (token == NULL){
             token = strtok(tipo, ",");
-            tipo = token;
+            strcpy(tipo, token);
             token = strtok(NULL, ",");
             pc = atoi(token);
         }
@@ -156,11 +155,14 @@ void leer_archivo(List *almacenamiento, HashMap *map_pokedex, HashMap *map_pokem
         token = strtok(NULL, ",");
         region = token;
 
+        token = (char *) malloc (sizeof(char));
         token = strtok(tipo, ", ");
         pushBack(list_tipos, token);
+        token = (char *) malloc (sizeof(char));
         token = strtok(NULL, ", ");
-        while (token != NULL){
+        while (token){
             pushBack(list_tipos, token);
+            token = (char *) malloc (sizeof(char));
             token = strtok(NULL, ", ");
         }
 
@@ -170,10 +172,13 @@ void leer_archivo(List *almacenamiento, HashMap *map_pokedex, HashMap *map_pokem
         insert_map_pokemon(pokemon, map_pokemon); /* funciona */
         insert_map_id(pokemon, map_id); /* funciona */
         insert_map_tipo(pokemon, pokedex, map_tipo); /* funciona */
-        insert_map_pokedex(pokedex, map_pokedex); /* Corre pero lee mal los tipos */
+        //insert_map_pokedex(pokedex, map_pokedex); /* Corre pero lee mal los tipos */
         //pushBack(almacenamiento, pokedex); /* Corre pero lee mal los tipos */
         //insert_map_num_pokedex(pokedex, map_num_pokedex); /* Corre pero lee mal los tipos */
-        //insert_map_region(pokedex, map_region); /* Corre pero lee basura */
+        insert_map_region(pokedex, map_region); /* Corre pero lee mal los tipos */
+
+        leer_tipos(map_region, pokedex);
+
     }
 
     /* Lee todo bien */
@@ -185,9 +190,7 @@ void leer_archivo(List *almacenamiento, HashMap *map_pokedex, HashMap *map_pokem
     //leer_lista(almacenamiento);
     //leer_mapa_pokedex(map_num_pokedex);
     //leer_mapa_pokedex(map_pokedex);
-
-    /* Corre pero lee basura */
-    //leer_mapa_region(map_region);
+    leer_mapa_region(map_region);
 
     if (fclose(archivoEntrada) == EOF){
         printf("El archivo no se pudo cerrar correctamente.");
@@ -422,11 +425,35 @@ void leer_mapa_region(HashMap *map_region){
         pokedex = firstList(list_region);
         printf("- %s -\n", pokedex->region);
         while(pokedex){
-            printf("hola\n");
-            printf("%s %d %s %s %s \n", pokedex->nombre, pokedex->existencia, pokedex->ev_prev, pokedex->ev_post);
+            printf("%s %d %s %s ", pokedex->nombre, pokedex->existencia, pokedex->ev_prev, pokedex->ev_post);
+
+            List *list_tipos = pokedex->tipos;
+            char *tipo = firstList(list_tipos);
+            while(tipo){
+                printf("%s ", tipo);
+                tipo = nextList(list_tipos);
+            }
+            printf("\n");
             pokedex = nextList(list_region);
         }
         list_region = nextMap(map_region);
+    }
+
+}
+
+void leer_tipos(HashMap *map_region, Pokedex *pokedex){
+
+    List *list = searchMap(map_region, pokedex->region);
+    Pokedex *dato = firstList(list);
+    while(dato){
+        List *list_tipos = dato->tipos;
+        char *tipo = firstList(list_tipos);
+        while(tipo){
+            printf("%s ", tipo);
+            tipo = nextList(list_tipos);
+        }
+        printf("\n");
+        dato = nextList(list);
     }
 
 }

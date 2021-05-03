@@ -43,6 +43,8 @@ void leer_mapa_nombres(HashMap *map_pokemon);
 
 void leer_mapa_region(HashMap *map_region);
 
+void leer_tipos(HashMap *map_region, Pokedex *pokedex);
+
 //void atrapar_pokemon(List *almacenamiento, HashMap *map_pokedex, HashMap *map_pokemon, HashMap *map_id, HashMap *map_tipo, HashMap *map_region, HashMap *map_num_pokedex);
 
 #endif /* POKEMON_H */
