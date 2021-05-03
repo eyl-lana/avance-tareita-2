@@ -8,14 +8,15 @@
 int main()
 {
 
-	List *almacenamiento = createList();
+	List *list_pc = createList();
+	List *list_numpokedex = createList();
 	HashMap *map_pokedex = createMap(300);
 	HashMap *map_pokemon = createMap(300);
 	HashMap *map_id = createMap(300);
 	HashMap *map_tipo = createMap(300);
 	HashMap *map_region = createMap(300);
 
-	leer_archivo(almacenamiento, map_pokedex, map_pokemon, map_id, map_tipo, map_region);
+	leer_archivo(list_pc, list_numpokedex, map_pokedex, map_pokemon, map_id, map_tipo, map_region);
 	printf("Se leyo el archivo correctamente.\n");
 
 	int opcion;
@@ -30,7 +31,7 @@ int main()
 			case 1: /* Leer archivo */
 				break;
 			case 2: /* Atrapar pokemon */
-				pedir_datos(almacenamiento, map_pokedex, map_pokemon, map_id, map_tipo, map_region);
+				pedir_datos(list_pc, list_numpokedex, map_pokedex, map_pokemon, map_id, map_tipo, map_region);
 				break;
 			case 3: /* Evolucionar pokemon */
 				break;

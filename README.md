@@ -2,7 +2,7 @@
 
 Esta listo:
 Leer archivo
-Guardar todo en mapas (falta guardar en lista por pc y lista por num pokedex)
+Guardar todo en mapas y listas
 Agregar un pokemon
 
 Lo que falta:
