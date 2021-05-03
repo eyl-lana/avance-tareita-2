@@ -2,9 +2,11 @@
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
-#include "map.h"
+#include "Map.h"
 #include "list.h"
 #include "pokemon.h"
+
+int int_id = 0;
 
 typedef struct Pokemon Pokemon;
 typedef struct Pokedex Pokedex;
@@ -23,7 +25,7 @@ struct Pokedex{
     List *tipos;
     char ev_prev[20];
     char ev_post[20];
-    char num_pokedex[4];
+    int num_pokedex;
     char region[20];
 };
 
@@ -46,6 +48,8 @@ void menu_pokemon(){
 Pokemon *crear_pokemon(char *id, char *nombre, int pc, int ps, char *sexo){
     Pokemon *pokemon = (Pokemon *) malloc (sizeof(Pokemon));
     strcpy(pokemon->id, id);
+    int_id = atoi(id);
+    printf("%d ", int_id);
     printf("%s ", pokemon->id);
     strcpy(pokemon->nombre, nombre);
     printf("%s ", pokemon->nombre);
@@ -58,7 +62,7 @@ Pokemon *crear_pokemon(char *id, char *nombre, int pc, int ps, char *sexo){
     return pokemon;
 }
 
-Pokedex *crear_pokedex(char *nombre, List *tipos, char *ev_prev, char *ev_post, char *num_pokedex, char *region){
+Pokedex *crear_pokedex(char *nombre, List *tipos, char *ev_prev, char *ev_post, int num_pokedex, char *region){
     Pokedex *pokedex = (Pokedex *) malloc (sizeof(Pokedex));
     strcpy(pokedex->nombre, nombre);
     printf("%s ", pokedex->nombre);
@@ -76,14 +80,14 @@ Pokedex *crear_pokedex(char *nombre, List *tipos, char *ev_prev, char *ev_post, 
     printf("%s ", pokedex->ev_prev);
     strcpy(pokedex->ev_post, ev_post);
     printf("%s ", pokedex->ev_post);
-    strcpy(pokedex->num_pokedex, num_pokedex);
-    printf("%s ", pokedex->num_pokedex);
+    pokedex->num_pokedex = num_pokedex;
+    printf("%d ", pokedex->num_pokedex);
     strcpy(pokedex->region, region);
     printf("%s ", pokedex->region);
     return pokedex;
 }
 
-void leer_archivo(List *almacenamiento, HashMap *map_pokedex, HashMap *map_pokemon, HashMap *map_id, HashMap *map_tipo, HashMap *map_region, HashMap *map_num_pokedex){
+void leer_archivo(List *almacenamiento, HashMap *map_pokedex, HashMap *map_pokemon, HashMap *map_id, HashMap *map_tipo, HashMap *map_region){
 
     char archivo[20];
     printf("\nPor favor ingrese el archivo que se desea leer: ");
@@ -99,13 +103,14 @@ void leer_archivo(List *almacenamiento, HashMap *map_pokedex, HashMap *map_pokem
     char *token;
     char *id;
     char *nombre;
-    char tipo[20];
+    //char tipo[20];
+    //char *tipo;
     int pc;
     int ps;
     char *sexo;
     char *ev_prev;
     char *ev_post;
-    char *num_pokedex;
+    int num_pokedex;
     char *region;
 
     Pokemon *pokemon;
@@ -116,6 +121,8 @@ void leer_archivo(List *almacenamiento, HashMap *map_pokedex, HashMap *map_pokem
         fgetc(archivoEntrada);
 
         List *list_tipos = createList();
+        char *tipo;
+        tipo = (char *) malloc (20 * sizeof(char));
 
         token = strtok(linea, ",");
         id = token;
@@ -124,12 +131,12 @@ void leer_archivo(List *almacenamiento, HashMap *map_pokedex, HashMap *map_pokem
         nombre = token;
 
         token = strtok(NULL, "\"");
-        strcpy(tipo, token);
+        tipo = token;
 
         token = strtok(NULL, ",");
         if (token == NULL){
             token = strtok(tipo, ",");
-            strcpy(tipo, token);
+            tipo = token;
             token = strtok(NULL, ",");
             pc = atoi(token);
         }
@@ -150,19 +157,16 @@ void leer_archivo(List *almacenamiento, HashMap *map_pokedex, HashMap *map_pokem
         ev_post = token;
 
         token = strtok(NULL, ",");
-        num_pokedex = token;
+        num_pokedex = atoi(token);
 
         token = strtok(NULL, ",");
         region = token;
 
-        token = (char *) malloc (sizeof(char));
         token = strtok(tipo, ", ");
         pushBack(list_tipos, token);
-        token = (char *) malloc (sizeof(char));
         token = strtok(NULL, ", ");
         while (token){
             pushBack(list_tipos, token);
-            token = (char *) malloc (sizeof(char));
             token = strtok(NULL, ", ");
         }
 
@@ -172,25 +176,22 @@ void leer_archivo(List *almacenamiento, HashMap *map_pokedex, HashMap *map_pokem
         insert_map_pokemon(pokemon, map_pokemon); /* funciona */
         insert_map_id(pokemon, map_id); /* funciona */
         insert_map_tipo(pokemon, pokedex, map_tipo); /* funciona */
-        //insert_map_pokedex(pokedex, map_pokedex); /* Corre pero lee mal los tipos */
-        //pushBack(almacenamiento, pokedex); /* Corre pero lee mal los tipos */
-        //insert_map_num_pokedex(pokedex, map_num_pokedex); /* Corre pero lee mal los tipos */
+        insert_map_pokedex(pokedex, map_pokedex); /* Corre pero lee mal los tipos */
         insert_map_region(pokedex, map_region); /* Corre pero lee mal los tipos */
-
-        leer_tipos(map_region, pokedex);
+        //pushBack(almacenamiento, pokedex); /* Corre pero lee mal los tipos */
+        //leer_tipos(map_region, pokedex);
 
     }
 
     /* Lee todo bien */
-    //leer_mapa_pokemon(map_id);
+    //leer_mapa_id(map_id);
     //leer_mapa_tipos(map_tipo);
-    //leer_mapa_nombres(map_pokemon);
+    //leer_mapa_pokemon(map_pokemon);
 
     /* Lee mal los tipos */
     //leer_lista(almacenamiento);
-    //leer_mapa_pokedex(map_num_pokedex);
     //leer_mapa_pokedex(map_pokedex);
-    leer_mapa_region(map_region);
+    //leer_mapa_region(map_region);
 
     if (fclose(archivoEntrada) == EOF){
         printf("El archivo no se pudo cerrar correctamente.");
@@ -198,15 +199,20 @@ void leer_archivo(List *almacenamiento, HashMap *map_pokedex, HashMap *map_pokem
 
 }
 
-/*void pedir_datos(List *almacenamiento, HashMap *map_pokedex, HashMap *map_pokemon, HashMap *map_id, HashMap *map_tipo, HashMap *map_region, HashMap *map_num_pokedex){
+void pedir_datos(List *almacenamiento, HashMap *map_pokedex, HashMap *map_pokemon, HashMap *map_id, HashMap *map_tipo, HashMap *map_region){
 
-	char *nombre = (char *) malloc (15 * sizeof(char));
-	char *sexo = (char *) malloc (6 * sizeof(char));
-	char *ev_prev = (char *) malloc (15 * sizeof(char));
-	char *ev_post = (char *) malloc (15 * sizeof(char));
+    char id[3];
+	char nombre[20];
+	char sexo[10];
+	char ev_prev[20];
+	char ev_post[20];
 	int pc, ps, num_pokedex;
-	char *region = (char *) malloc (10 * sizeof(char));
-	List* list_tipos = createList();
+	char region[20];
+	List *list_tipos = createList();
+
+    int_id ++;
+    sprintf(id, "%d", int_id);
+    printf("%s\n", id);
 
 	printf("Ingrese el nombre del pokemon: ");
 	scanf("%s", nombre);
@@ -232,34 +238,41 @@ void leer_archivo(List *almacenamiento, HashMap *map_pokedex, HashMap *map_pokem
 	printf("Ingrese el sexo del pokemon (Macho o Hembra): ");
 	scanf("%s", sexo);
 
-    /* Falta verificar 'No tiene'
+    /* Falta verificar 'No tiene' */
 	printf("Ingrese su evolucion previa (Si no tiene simplemente escriba: No tiene): ");
 	scanf("%s", ev_prev);
 
-    /* Falta verificar 'No tiene' 
+    /* Falta verificar 'No tiene' */
 	printf("Ingrese su evolucion posterior (Si no tiene simplemente escriba: No tiene): ");
 	scanf("%s", ev_post);
 
-    /* Falta comparar num de pokedex 
+    /* Falta comparar num de pokedex */
 	printf("Ingrese el numero en la pokedex del pokemon: ");
-	scanf("%i", &num_pokedex);
+	scanf("%d", &num_pokedex);
 
 	printf("Ingrese la region del pokemon: ");
 	scanf("%s", region);
 
-    pokemon = crear_pokemon(id, nombre, pc, ps, sexo);
-    pokedex = crear_pokedex(nombre, list_tipos, ev_prev, ev_post, num_pokedex, region);
+    Pokemon *pokemon = crear_pokemon(id, nombre, pc, ps, sexo);
+    Pokedex *pokedex = crear_pokedex(nombre, list_tipos, ev_prev, ev_post, num_pokedex, region);
     printf("\n");
-    insert_map_pokedex(pokemon, pokedex, map_pokedex);
+    insert_map_pokedex(pokedex, map_pokedex);
     insert_map_pokemon(pokemon, map_pokemon);
     insert_map_id(pokemon, map_id);
     insert_map_tipo(pokemon, pokedex, map_tipo);
-    insert_map_region(pokemon, pokedex, map_region);
-    insert_map_num_pokedex(pokedex, map_num_pokedex);
+    insert_map_region(pokedex, map_region);
 
-    //atrapar_pokemon(almacenamiento, map_pokedex, map_pokemon, map_id, map_tipo, map_region, map_num_pokedex);
+    /* Lee todo bien */
+    //leer_mapa_id(map_id);
+    //leer_mapa_tipos(map_tipo);
+    //leer_mapa_pokemon(map_pokemon);
 
-}*/
+    /* Lee mal los tipos */
+    //leer_lista(almacenamiento);
+    //leer_mapa_pokedex(map_pokedex);
+    //leer_mapa_region(map_region);
+
+}
 
 void insert_map_pokedex(Pokedex *pokedex, HashMap *map_pokedex){
     
@@ -288,7 +301,6 @@ void insert_map_pokemon(Pokemon *pokemon, HashMap *map_pokemon){
 
 }
 
-/* Hay que utilizar la ultima key id ingresada para agregar un pokemon con la key id siguiente */
 void insert_map_id(Pokemon *pokemon, HashMap *map_id){
 
     insertMap(map_id, pokemon->id, pokemon);
@@ -329,22 +341,13 @@ void insert_map_region(Pokedex *pokedex, HashMap *map_region){
 
 }
 
-void insert_map_num_pokedex(Pokedex *pokedex, HashMap *map_num_pokedex){
-
-    Pokedex *dato_pokedex = searchMap(map_num_pokedex, pokedex->num_pokedex);
-    if (dato_pokedex == NULL){
-        insertMap(map_num_pokedex, pokedex->num_pokedex, pokedex);
-    }
-
-}
-
 void leer_lista(List *list){
 
     Pokedex *pokedex = firstList(list);
     List *list_tipos;
     char *tipo;
     while (pokedex){
-        printf("%s %d %s %s %s %s ", pokedex->nombre, pokedex->existencia, pokedex->ev_prev, pokedex->ev_post, pokedex->num_pokedex, pokedex->region);
+        printf("%s %d %s %s %d %s ", pokedex->nombre, pokedex->existencia, pokedex->ev_prev, pokedex->ev_post, pokedex->num_pokedex, pokedex->region);
         list_tipos = pokedex->tipos;
         tipo = firstList(list_tipos);
         while(tipo){
@@ -357,11 +360,12 @@ void leer_lista(List *list){
 
 }
 
-void leer_mapa_pokemon(HashMap *map){
+void leer_mapa_id(HashMap *map){
 
     Pokemon *pokemon = firstMap(map);
     while (pokemon){
-        printf("%s %s %d %d %s \n", pokemon->id, pokemon->nombre, pokemon->pc, pokemon->ps, pokemon->sexo);
+        printf("- %s -\n", pokemon->id );
+        printf("%s %d %d %s \n", pokemon->nombre, pokemon->pc, pokemon->ps, pokemon->sexo);
         pokemon = nextMap(map);
     }
 
@@ -372,11 +376,12 @@ void leer_mapa_pokedex(HashMap *map){
     Pokedex *pokedex = firstMap(map);
     List *list_tipos = createList();
     char *tipo;
-    while (pokedex != NULL){
-        printf("%s %d %s %s %s %s ", pokedex->nombre, pokedex->existencia, pokedex->ev_prev, pokedex->ev_post, pokedex->num_pokedex, pokedex->region);
+    while (pokedex){
+        printf("%s %d %s %s %d %s ", pokedex->nombre, pokedex->existencia, pokedex->ev_prev, pokedex->ev_post, pokedex->num_pokedex, pokedex->region);
+        List *list_tipos = createList();
         list_tipos = pokedex->tipos;
         tipo = firstList(list_tipos);
-        while(tipo != NULL){
+        while(tipo){
             printf("%s ", tipo);
             tipo = nextList(list_tipos);
         }
@@ -391,6 +396,7 @@ void leer_mapa_tipos(HashMap *map_tipo){
     List *list_tipos = firstMap(map_tipo);
     Pokemon *tipo;
     while(list_tipos){
+        //printf("- %s -\n", list_tipos);
         tipo = firstList(list_tipos);
         while(tipo){
             printf("%s %s %d %d %s \n", tipo->id, tipo->nombre, tipo->pc, tipo->ps, tipo->sexo);
@@ -401,7 +407,7 @@ void leer_mapa_tipos(HashMap *map_tipo){
 
 }
 
-void leer_mapa_nombres(HashMap *map_pokemon){
+void leer_mapa_pokemon(HashMap *map_pokemon){
 
     List *list_nombres = firstMap(map_pokemon);
     Pokemon *pokemon;
@@ -457,12 +463,3 @@ void leer_tipos(HashMap *map_region, Pokedex *pokedex){
     }
 
 }
-
-/* Leer mapas para comprobar que los datos se guardan correspontamente */
-/*void atrapar_pokemon(List *almacenamiento, HashMap *map_pokedex, HashMap *map_pokemon, HashMap *map_id, HashMap *map_tipo, HashMap *map_region, HashMap *map_num_pokedex){
-
-    char aux_id[3];
-    sprintf(aux_id, "%d", id);
-    printf("atrapar_pokemon\n");
-
-}*/
