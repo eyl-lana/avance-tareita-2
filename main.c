@@ -37,18 +37,32 @@ int main()
 				break;
 			case 3: /* Evolucionar pokemon */
 				break;
-			case 4: /* Buscar pokemones por tipo */
+			case 4:; /* Buscar pokemones por tipo */
+
+				/* Se cae, no funcionara hasta que se arreglen los tipos */
+				char tipo[20];
+				printf("Ingrese el tipo de pokemon que desea buscar: ");
+				scanf("%s", tipo);
+				buscar_tipo(map_tipo, tipo);
+
 				break;
+
 			case 5:; /* Buscar pokemones por nombre */
-				printf("Ingrese nombre del pokemon: ");
+
+				printf("Ingrese nombre del pokemon que desea buscar: ");
 				scanf("%s", nombre);
 				buscar_nombre_pokemon(map_pokemon, nombre);
+
 				break;
+
 			case 6:; /* Buscar pokemon por nombre en pokedex */
-				printf("Ingrese nombre del pokemon: ");
+
+				printf("Ingrese nombre del pokemon que desea buscar: ");
 				scanf("%s", nombre);
 				buscar_nombre_pokedex(map_pokedex, nombre);
+
 				break;
+
 			case 7: /* Mostrar todos los pokemones de la pokedex (en orden por num pokedex) */
 				break;
 			case 8: /* Mostrar pokemones ordenar por pc */

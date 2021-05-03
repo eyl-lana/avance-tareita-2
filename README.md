@@ -8,7 +8,7 @@ Agregar un pokemon
 
 Lo que falta:
 Arreglar los tipos (se guardan mal en la lista al leer el archivo)
+La busqueda por tipo no funcionara hasta que se arregle ese problema
 Evolucionar un pokemon
-Busqueda (por tipo)
 Mostrar (pokedex ordenados por num pokedex, pokemones ordenados por pc, pokedex por region, pokemones por pc)
 Eliminar un pokemon

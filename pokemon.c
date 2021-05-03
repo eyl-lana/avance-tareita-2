@@ -476,12 +476,16 @@ void leer_list_numpokedex(List *list_num_pokedex){
 
 void buscar_nombre_pokemon(HashMap *map_pokemon, char *nombre){
 
-    List *list_nombres = searchMap(map_pokemon, nombre);
-    Pokemon *pokemon = firstList(list_nombres);
-    printf("- Informacion de combate del pokemon: %s -\n", pokemon->nombre);
+    List *list_pokemon = searchMap(map_pokemon, nombre);
+    if (list_pokemon == NULL){
+        printf("El pokemon buscado no existe.\n");
+        exit(1);
+    }
+    Pokemon *pokemon = firstList(list_pokemon);
+    printf("\n- Informacion de combate del pokemon: %s \n", pokemon->nombre);
     while(pokemon){
         printf("%s %d %d %s\n", pokemon->id, pokemon->pc, pokemon->ps, pokemon->sexo);
-        pokemon = nextList(list_nombres);
+        pokemon = nextList(list_pokemon);
     }
 
 }
@@ -489,7 +493,11 @@ void buscar_nombre_pokemon(HashMap *map_pokemon, char *nombre){
 void buscar_nombre_pokedex(HashMap *map_pokedex, char *nombre){
 
     Pokedex *pokedex = searchMap(map_pokedex, nombre);
-    printf("- Informacion de pokedex del pokemon: %s -\n", pokedex->nombre);
+    if (pokedex == NULL){
+        printf("El pokemon buscado no existe.\n");
+        exit(1);
+    }
+    printf("\n- Informacion de pokedex del pokemon: %s -\n", pokedex->nombre);
     printf("%d ", pokedex->existencia);
 
     List *list_tipos = pokedex->tipos;
@@ -499,5 +507,22 @@ void buscar_nombre_pokedex(HashMap *map_pokedex, char *nombre){
         tipo = nextList(list_tipos);
     }
     printf("%s %s %d %s \n", pokedex->ev_prev, pokedex->ev_post, pokedex->num_pokedex, pokedex->region);
+
+}
+
+/* Se cae, no funcionara hasta que se arreglen los tipos */
+void buscar_tipo(HashMap *map_tipo, char *tipo){
+
+    List *list_pokemon = searchMap(map_tipo, tipo);
+    if (list_pokemon == NULL){
+        printf("El tipo de pokemon buscado no existe.\n");
+        exit(1);
+    }
+    Pokemon *pokemon = firstList(list_pokemon);
+    printf("- Informacion de combate del pokemon: %s \n", tipo);
+    while(pokemon){
+        printf("%s %d %d %s\n", pokemon->id, pokemon->pc, pokemon->ps, pokemon->sexo);
+        pokemon = nextList(list_pokemon);
+    }
 
 }
