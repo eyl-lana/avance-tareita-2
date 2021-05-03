@@ -209,13 +209,12 @@ void pedir_datos(List *list_pc, List *list_numpokedex, HashMap *map_pokedex, Has
 
     int_id ++;
     sprintf(id, "%d", int_id);
-    printf("%s\n", id);
 
 	printf("Ingrese el nombre del pokemon: ");
 	scanf("%s", nombre);
 	
 	int cant_pokemon;
-	printf("¿Cuantos tipos tiene su pokemon? (ingrese un numero entero): ");
+	printf("Ingrese la cantidad de tipos que tiene el pokemon (ingrese un numero entero): ");
 	scanf("%d", &cant_pokemon);
 	
 	for (int i = 0; i < cant_pokemon; i++)
