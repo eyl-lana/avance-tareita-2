@@ -35,10 +35,10 @@ void menu_pokemon(){
   printf("2.- Atrapar un pokemon\n");
   printf("3.- Evolucionar un pokemon\n");
   printf("4.- Mostrar pokemones de acuerdo a su tipo\n");
-  printf("5.- Pokemon y su informacion de combate\n");
-  printf("6.- Pokemon y su informacion personal\n");
+  printf("5.- Buscar pokemones por nombre y su informacion de combate\n");
+  printf("6.- Buscar pokemon por nombre y su informacion personal\n");
   printf("7.- Mostrar todos los pokemones\n");
-  printf("8.- Pokemones ordenados por puntos de combate\n");
+  printf("8.- Mostrar pokemones ordenados por puntos de combate\n");
   printf("9.- Liberar un pokemon\n");
   printf("10.- Mostrar pokemones de acuerdo a su region\n");
   printf("11.- Salir del juego\n");
@@ -253,7 +253,7 @@ void pedir_datos(List *list_pc, List *list_numpokedex, HashMap *map_pokedex, Has
     Pokemon *pokemon = crear_pokemon(id, nombre, pc, ps, sexo);
     Pokedex *pokedex = crear_pokedex(nombre, list_tipos, ev_prev, ev_post, num_pokedex, region);
     printf("\n");
-    insert_map_pokedex(pokedex, map_pokedex);
+    insert_map_pokedex(pokedex, map_pokedex, list_numpokedex);
     insert_map_pokemon(pokemon, map_pokemon);
     insert_map_id(pokemon, map_id);
     insert_map_tipo(pokemon, pokedex, map_tipo);
@@ -471,5 +471,33 @@ void leer_list_numpokedex(List *list_num_pokedex){
         printf("\n");
         pokedex = nextList(list_num_pokedex);
     }
+
+}
+
+void buscar_nombre_pokemon(HashMap *map_pokemon, char *nombre){
+
+    List *list_nombres = searchMap(map_pokemon, nombre);
+    Pokemon *pokemon = firstList(list_nombres);
+    printf("- Informacion de combate del pokemon: %s -\n", pokemon->nombre);
+    while(pokemon){
+        printf("%s %d %d %s\n", pokemon->id, pokemon->pc, pokemon->ps, pokemon->sexo);
+        pokemon = nextList(list_nombres);
+    }
+
+}
+
+void buscar_nombre_pokedex(HashMap *map_pokedex, char *nombre){
+
+    Pokedex *pokedex = searchMap(map_pokedex, nombre);
+    printf("- Informacion de pokedex del pokemon: %s -\n", pokedex->nombre);
+    printf("%d ", pokedex->existencia);
+
+    List *list_tipos = pokedex->tipos;
+    char *tipo = firstList(list_tipos);
+    while(tipo){
+        printf("%s ", tipo);
+        tipo = nextList(list_tipos);
+    }
+    printf("%s %s %d %s \n", pokedex->ev_prev, pokedex->ev_post, pokedex->num_pokedex, pokedex->region);
 
 }

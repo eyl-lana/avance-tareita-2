@@ -45,4 +45,8 @@ void leer_list_pokemon(List *list_pc);
 
 void leer_list_numpokedex(List *list_num_pokedex);
 
+void buscar_nombre_pokemon(HashMap *map_pokemon, char *nombre);
+
+void buscar_nombre_pokedex(HashMap *map_pokedex, char *nombre);
+
 #endif /* POKEMON_H */

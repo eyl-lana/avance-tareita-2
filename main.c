@@ -26,6 +26,8 @@ int main()
 		scanf("%d", &opcion);
 		printf("\n");
 
+		char nombre[20];
+
 		switch(opcion){
 
 			case 1: /* Leer archivo */
@@ -37,9 +39,15 @@ int main()
 				break;
 			case 4: /* Buscar pokemones por tipo */
 				break;
-			case 5: /* Buscar pokemones por nombre */
+			case 5:; /* Buscar pokemones por nombre */
+				printf("Ingrese nombre del pokemon: ");
+				scanf("%s", nombre);
+				buscar_nombre_pokemon(map_pokemon, nombre);
 				break;
-			case 6: /* Buscar pokemon por nombre en pokedex */
+			case 6:; /* Buscar pokemon por nombre en pokedex */
+				printf("Ingrese nombre del pokemon: ");
+				scanf("%s", nombre);
+				buscar_nombre_pokedex(map_pokedex, nombre);
 				break;
 			case 7: /* Mostrar todos los pokemones de la pokedex (en orden por num pokedex) */
 				break;
