@@ -69,7 +69,13 @@ int main()
 				break;
 			case 9: /* Liberar pokemon */
 				break;
-			case 10: /* Mostrar pokemones por region */
+			case 10:; /* Mostrar pokemones por region */
+
+				char region[20];
+				printf("Ingrese la region: ");
+				scanf("%s", region);
+				buscar_region(map_region, region);
+				
 				break;
 			case 11: /* Salir */
 				break;

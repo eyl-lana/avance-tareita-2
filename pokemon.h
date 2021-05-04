@@ -51,4 +51,6 @@ void buscar_nombre_pokedex(HashMap *map_pokedex, char *nombre);
 
 void buscar_tipo(HashMap *map_tipo, char *tipo);
 
+void buscar_region(HashMap *map_region, char *region);
+
 #endif /* POKEMON_H */

@@ -493,7 +493,7 @@ void buscar_nombre_pokedex(HashMap *map_pokedex, char *nombre){
 
     Pokedex *pokedex = searchMap(map_pokedex, nombre);
     if (pokedex == NULL){
-        printf("El pokemon buscado no existe.\n");
+        printf("El pokemon ingresado no existe.\n");
         exit(1);
     }
     printf("\n- Informacion de pokedex del pokemon: %s -\n", pokedex->nombre);
@@ -514,7 +514,7 @@ void buscar_tipo(HashMap *map_tipo, char *tipo){
 
     List *list_pokemon = searchMap(map_tipo, tipo);
     if (list_pokemon == NULL){
-        printf("El tipo de pokemon buscado no existe.\n");
+        printf("El tipo de pokemon ingresado no existe.\n");
         exit(1);
     }
     Pokemon *pokemon = firstList(list_pokemon);
@@ -522,6 +522,31 @@ void buscar_tipo(HashMap *map_tipo, char *tipo){
     while(pokemon){
         printf("%s %d %d %s\n", pokemon->id, pokemon->pc, pokemon->ps, pokemon->sexo);
         pokemon = nextList(list_pokemon);
+    }
+
+}
+
+void buscar_region(HashMap *map_region, char *region){
+
+    List *list_pokemon = searchMap(map_region, region);
+    if (list_pokemon == NULL){
+        printf("La region ingresada no existe.\n");
+        exit(1);
+    }
+
+    Pokedex *pokedex = firstList(list_pokemon);
+    printf("- Informacion de combate del pokemon: %s \n", region);
+    while(pokedex){
+        printf("%s %d ", pokedex->nombre, pokedex->existencia);
+
+        List *list_tipos = pokedex->tipos;
+        char *tipo = firstList(list_tipos);
+        while(tipo){
+            printf("%s ", tipo);
+            tipo = nextList(list_tipos);
+        }
+        printf("%s %s %d \n", pokedex->ev_prev, pokedex->ev_post, pokedex->num_pokedex);
+        pokedex = nextList(list_pokemon);
     }
 
 }
