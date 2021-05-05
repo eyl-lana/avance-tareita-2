@@ -120,7 +120,6 @@ void leer_archivo(List *list_pc, List *list_numpokedex, HashMap *map_pokedex, Ha
 
         List *list_tipos = createList();
         char *tipo;
-        tipo = (char *) malloc (20 * sizeof(char));
 
         token = strtok(linea, ",");
         id = token;
@@ -186,7 +185,7 @@ void leer_archivo(List *list_pc, List *list_numpokedex, HashMap *map_pokedex, Ha
     //leer_list_pokemon(list_pc);
 
     /* Lee mal los tipos */
-    //leer_mapa_pokedex(map_pokedex);
+    leer_mapa_pokedex(map_pokedex);
     //leer_mapa_region(map_region);
     //leer_list_numpokedex(list_num_pokedex);
 
