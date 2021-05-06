@@ -32,7 +32,7 @@ int main()
 				printf("Se leyo el archivo correctamente.\n");
 				break;
 			case 2: /* Atrapar pokemon */
-				//pedir_datos(list_pc, list_numpokedex, map_pokedex, map_pokemon, map_id, map_tipo, map_region);
+				pedir_datos(list_pc, list_numpokedex, map_pokedex, map_pokemon, map_id, map_tipo, map_region);
 				break;
 			case 3: /* Evolucionar pokemon */
 				break;

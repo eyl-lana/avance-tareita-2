@@ -74,17 +74,17 @@ Pokedex *crear_pokedex(char *nombre, char *tipos, char *ev_prev, char *ev_post, 
     printf("%s ", pokedex->string_tipos);
 
     pokedex->tipos = createList();
-    char *aux = strtok(tipos, ", ");
+    char *aux = strtok(pokedex->string_tipos, ", ");
     while(aux){
         pushBack(pokedex->tipos, aux);
         aux = strtok(NULL, ", ");
     }
 
-    char *aux2 = firstList(pokedex->tipos);
+    /*char *aux2 = firstList(pokedex->tipos);
     while(aux2){
         printf("%s ", aux2);
         aux2 = nextList(pokedex->tipos);
-    }
+    }*/
 
     strcpy(pokedex->ev_prev, ev_prev);
     printf("%s ", pokedex->ev_prev);
@@ -178,15 +178,12 @@ void leer_archivo(List *list_pc, List *list_numpokedex, HashMap *map_pokedex, Ha
         insert_map_tipo(pokemon, pokedex, map_tipo); /* funciona */
     }
 
-    /* Lee todo bien */
     //leer_mapa_id(map_id);
     //leer_mapa_pokemon(map_pokemon);
     //leer_list_pokemon(list_pc);
     //leer_mapa_pokedex(map_pokedex);
     //leer_mapa_region(map_region);
     //leer_list_numpokedex(list_numpokedex);
-
-    /* Falta arreglar */
     //leer_mapa_tipos(map_tipo);
 
     if (fclose(archivoEntrada) == EOF){
@@ -200,29 +197,25 @@ void pedir_datos(List *list_pc, List *list_numpokedex, HashMap *map_pokedex, Has
     char id[3];
 	char nombre[20];
 	char sexo[10];
+    char tipos[20];
 	char ev_prev[20];
 	char ev_post[20];
 	int pc, ps, num_pokedex;
 	char region[20];
-	List *list_tipos = createList();
 
     int_id ++;
     sprintf(id, "%d", int_id);
 
 	printf("Ingrese el nombre del pokemon: ");
 	scanf("%s", nombre);
+    getchar();
 	
-	int cant_pokemon;
-	printf("Ingrese la cantidad de tipos que tiene el pokemon (ingrese un numero entero): ");
-	scanf("%d", &cant_pokemon);
-	
-	for (int i = 0; i < cant_pokemon; i++)
-	{
-		char* tipo = (char *) malloc (10 * sizeof(char));
-		printf("Ingrese el tipo de su pokemon: ");
-		scanf("%s", tipo);
-		pushBack(list_tipos, tipo); /* ojito */
-	}
+    printf("Ingrese el tipo o los tipos de su pokemon: ");
+    fgets(tipos, 20, stdin); /* scanf no lee espacios */
+
+    if ((strlen(tipos) > 0) && (tipos[strlen(tipos) - 1] == '\n')){
+        tipos[strlen(tipos) - 1] = '\0';
+    }
 
 	printf("Ingrese los puntos de combate del pokemon: ");
 	scanf("%d", &pc);
@@ -249,7 +242,7 @@ void pedir_datos(List *list_pc, List *list_numpokedex, HashMap *map_pokedex, Has
 	scanf("%s", region);
 
     Pokemon *pokemon = crear_pokemon(id, nombre, pc, ps, sexo);
-    Pokedex *pokedex = crear_pokedex(nombre, list_tipos, ev_prev, ev_post, num_pokedex, region);
+    Pokedex *pokedex = crear_pokedex(nombre, tipos, ev_prev, ev_post, num_pokedex, region);
     printf("\n");
     insert_map_pokedex(pokedex, map_pokedex, list_numpokedex);
     insert_map_pokemon(pokemon, map_pokemon);
@@ -307,11 +300,11 @@ void insert_map_id(Pokemon *pokemon, HashMap *map_id){
 
 void insert_map_tipo(Pokemon *pokemon, Pokedex *pokedex, HashMap *map_tipo){
 
-    char *tipo = firstList(pokedex->tipos);
+    List *aux = pokedex->tipos;
+    char *tipo = firstList(aux);
     while(tipo)
     {
         List *list = searchMap(map_tipo, tipo);
-        //Pokemon *primer_dato = firstList(list);
         if (list == NULL){
             List *list_tipos = createList();
             pushBack(list_tipos, pokemon);
@@ -320,7 +313,7 @@ void insert_map_tipo(Pokemon *pokemon, Pokedex *pokedex, HashMap *map_tipo){
         else{
             pushBack(list, pokemon);
         }
-        tipo = nextList(pokedex->tipos);
+        tipo = nextList(aux);
     }
 
 }
@@ -367,7 +360,7 @@ void leer_mapa_tipos(HashMap *map_tipo){
     List *list_tipos = firstMap(map_tipo);
     Pokemon *tipo;
     while(list_tipos){
-        printf("- %s -\n", list_tipos);
+        printf("- tipo -\n");
         tipo = firstList(list_tipos);
         while(tipo){
             printf("%s %s %d %d %s \n", tipo->id, tipo->nombre, tipo->pc, tipo->ps, tipo->sexo);
@@ -496,7 +489,7 @@ void buscar_tipo(HashMap *map_tipo, char *tipo){
     Pokemon *pokemon = firstList(list_pokemon);
     printf("- Informacion de combate del pokemon: %s \n", tipo);
     while(pokemon){
-        printf("%s %d %d %s\n", pokemon->id, pokemon->pc, pokemon->ps, pokemon->sexo);
+        printf("%s %s %d %d %s\n", pokemon->id, pokemon->nombre, pokemon->pc, pokemon->ps, pokemon->sexo);
         pokemon = nextList(list_pokemon);
     }
 
