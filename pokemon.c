@@ -22,7 +22,7 @@ struct Pokemon{
 struct Pokedex{
     char nombre[20];
     int existencia;
-    char string_tipos[100];
+    char string_tipos[1024];
     List *tipos;
     char ev_prev[20];
     char ev_post[20];
@@ -80,11 +80,11 @@ Pokedex *crear_pokedex(char *nombre, char *tipos, char *ev_prev, char *ev_post, 
         aux = strtok(NULL, ", ");
     }
 
-    /*char *aux2 = firstList(pokedex->tipos);
+    char *aux2 = firstList(pokedex->tipos);
     while(aux2){
         printf("%s ", aux2);
         aux2 = nextList(pokedex->tipos);
-    }*/
+    }
 
     strcpy(pokedex->ev_prev, ev_prev);
     printf("%s ", pokedex->ev_prev);
@@ -99,10 +99,12 @@ Pokedex *crear_pokedex(char *nombre, char *tipos, char *ev_prev, char *ev_post, 
 
 void leer_archivo(List *list_pc, List *list_numpokedex, HashMap *map_pokedex, HashMap *map_pokemon, HashMap *map_id, HashMap *map_tipo, HashMap *map_region){
 
-    char archivo[20];
+    char archivo[30];
     printf("\nPor favor ingrese el archivo que se desea leer: ");
     /* leer archivo con fgets */
-    scanf("%s", archivo);
+    getchar();
+    fgets(archivo, 30, stdin);
+    archivo[strlen(archivo) - 1] = '\0';
     FILE *archivoEntrada = fopen(archivo, "r");
     if (archivoEntrada == NULL){
         printf("El archivo no se pudo abrir en modo lectura");
@@ -197,7 +199,7 @@ void pedir_datos(List *list_pc, List *list_numpokedex, HashMap *map_pokedex, Has
     char id[3];
 	char nombre[20];
 	char sexo[10];
-    char tipos[20];
+    char tipos[1024];
 	char ev_prev[20];
 	char ev_post[20];
 	int pc, ps, num_pokedex;
@@ -211,11 +213,8 @@ void pedir_datos(List *list_pc, List *list_numpokedex, HashMap *map_pokedex, Has
     getchar();
 	
     printf("Ingrese el tipo o los tipos de su pokemon: ");
-    fgets(tipos, 20, stdin); /* scanf no lee espacios */
-
-    if ((strlen(tipos) > 0) && (tipos[strlen(tipos) - 1] == '\n')){
-        tipos[strlen(tipos) - 1] = '\0';
-    }
+    fgets(tipos, 1024, stdin);
+    tipos[strlen(tipos) - 1] = '\0';
 
 	printf("Ingrese los puntos de combate del pokemon: ");
 	scanf("%d", &pc);
@@ -298,8 +297,7 @@ void insert_map_tipo(Pokemon *pokemon, Pokedex *pokedex, HashMap *map_tipo){
 
     List *aux = pokedex->tipos;
     char *tipo = firstList(aux);
-    while(tipo)
-    {
+    while(tipo){
         List *list = searchMap(map_tipo, tipo);
         if (list == NULL){
             List *list_tipos = createList();
