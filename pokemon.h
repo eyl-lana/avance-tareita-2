@@ -15,7 +15,7 @@ void pedir_datos(List *list_pc, List *list_numpokedex, HashMap *map_pokedex, Has
 
 Pokemon *crear_pokemon(char *id, char *nombre, int pc, int ps, char *sexo);
 
-Pokedex *crear_pokedex(char *nombre, List *tipos, char *ev_prev, char *ev_post, int num_pokedex, char *region);
+Pokedex *crear_pokedex(char *nombre, char *tipos, char *ev_prev, char *ev_post, int num_pokedex, char *region);
 
 void insert_map_pokedex(Pokedex *pokedex, HashMap *map_pokedex, List *list_numpokedex);
 
