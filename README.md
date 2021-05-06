@@ -9,8 +9,7 @@ Busqueda por nombre en pokedex
 Busqueda por region
 
 Lo que falta:
-Arreglar los tipos (se guardan mal en la lista al leer el archivo)
-La busqueda por tipo no funcionara hasta que se arregle ese problema
+Exportar archivo
 Evolucionar un pokemon
 Mostrar (pokedex ordenados por num pokedex, pokemones ordenados por pc)
 Eliminar un pokemon
