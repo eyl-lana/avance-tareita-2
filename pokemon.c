@@ -106,7 +106,7 @@ void leer_archivo(List *list_pc, List *list_numpokedex, HashMap *map_pokedex, Ha
     FILE *archivoEntrada = fopen(archivo, "r");
     if (archivoEntrada == NULL){
         printf("El archivo no se pudo abrir en modo lectura");
-        exit(1);
+        return;
     }
 
     char linea[1024];
@@ -454,7 +454,7 @@ void buscar_nombre_pokemon(HashMap *map_pokemon, char *nombre){
     List *list_pokemon = searchMap(map_pokemon, nombre);
     if (list_pokemon == NULL){
         printf("El pokemon buscado no existe.\n");
-        exit(1);
+        return;
     }
     Pokemon *pokemon = firstList(list_pokemon);
     printf("\n- Informacion de combate del pokemon: %s \n", pokemon->nombre);
@@ -470,7 +470,7 @@ void buscar_nombre_pokedex(HashMap *map_pokedex, char *nombre){
     Pokedex *pokedex = searchMap(map_pokedex, nombre);
     if (pokedex == NULL){
         printf("El pokemon ingresado no existe.\n");
-        exit(1);
+        return;
     }
     printf("\n- Informacion de pokedex del pokemon: %s -\n", pokedex->nombre);
     printf("%d ", pokedex->existencia);
@@ -491,7 +491,7 @@ void buscar_tipo(HashMap *map_tipo, char *tipo){
     List *list_pokemon = searchMap(map_tipo, tipo);
     if (list_pokemon == NULL){
         printf("El tipo de pokemon ingresado no existe.\n");
-        exit(1);
+        return;
     }
     Pokemon *pokemon = firstList(list_pokemon);
     printf("- Informacion de combate del pokemon: %s \n", tipo);
@@ -507,7 +507,7 @@ void buscar_region(HashMap *map_region, char *region){
     List *list_pokemon = searchMap(map_region, region);
     if (list_pokemon == NULL){
         printf("La region ingresada no existe.\n");
-        exit(1);
+        return;
     }
 
     Pokedex *pokedex = firstList(list_pokemon);
