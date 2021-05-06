@@ -175,7 +175,7 @@ void leer_archivo(List *list_pc, List *list_numpokedex, HashMap *map_pokedex, Ha
         pushBack(list_pc, pokemon);
         insert_map_pokedex(pokedex, map_pokedex, list_numpokedex);
         insert_map_region(pokedex, map_region);
-        insert_map_tipo(pokemon, pokedex, map_tipo); /* funciona */
+        insert_map_tipo(pokemon, pokedex, map_tipo);
     }
 
     //leer_mapa_id(map_id);
@@ -251,15 +251,12 @@ void pedir_datos(List *list_pc, List *list_numpokedex, HashMap *map_pokedex, Has
     insert_map_region(pokedex, map_region);
     pushBack(list_pc, pokemon);
 
-    /* Lee todo bien */
     //leer_mapa_id(map_id);
     //leer_mapa_pokemon(map_pokemon);
     //leer_list_pokemon(list_pc);
     //leer_mapa_pokedex(map_pokedex);
     //leer_mapa_region(map_region);
     //leer_list_numpokedex(list_numpokedex);
-
-    /* Falta arreglar */
     //leer_mapa_tipos(map_tipo);
 
 }
@@ -280,7 +277,6 @@ void insert_map_pokedex(Pokedex *pokedex, HashMap *map_pokedex, List *list_numpo
 void insert_map_pokemon(Pokemon *pokemon, HashMap *map_pokemon){
 
     List *list = searchMap(map_pokemon, pokemon->nombre);
-    //Pokemon *primer_dato = firstList(list);
     if (list == NULL){
         List *list_nombres = createList();
         pushBack(list_nombres, pokemon);
@@ -321,7 +317,6 @@ void insert_map_tipo(Pokemon *pokemon, Pokedex *pokedex, HashMap *map_tipo){
 void insert_map_region(Pokedex *pokedex, HashMap *map_region){
 
     List *list = searchMap(map_region, pokedex->region);
-    //Pokemon *primer_dato = firstList(list);
     if (list == NULL){
         List *list_region = createList();
         pushBack(list_region, pokedex);
@@ -478,7 +473,6 @@ void buscar_nombre_pokedex(HashMap *map_pokedex, char *nombre){
 
 }
 
-/* Se cae, no funcionara hasta que se arreglen los tipos */
 void buscar_tipo(HashMap *map_tipo, char *tipo){
 
     List *list_pokemon = searchMap(map_tipo, tipo);
