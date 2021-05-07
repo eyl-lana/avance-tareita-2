@@ -101,10 +101,11 @@ void leer_archivo(List *list_pc, List *list_numpokedex, HashMap *map_pokedex, Ha
 
     char archivo[30];
     printf("\nPor favor ingrese el archivo que se desea leer: ");
-    /* leer archivo con fgets */
     getchar();
+    
     fgets(archivo, 30, stdin);
     archivo[strlen(archivo) - 1] = '\0';
+
     FILE *archivoEntrada = fopen(archivo, "r");
     if (archivoEntrada == NULL){
         printf("El archivo no se pudo abrir en modo lectura");
