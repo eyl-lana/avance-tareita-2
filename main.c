@@ -67,6 +67,8 @@ int main()
 			case 8: /* Mostrar pokemones ordenar por pc */
 				break;
 			case 9: /* Liberar pokemon */
+				liberar_pokemon(list_pc, map_pokedex, map_pokemon, map_id, map_tipo, map_region);
+				//leer_list_numpokedex(list_numpokedex);
 				break;
 			case 10:; /* Mostrar pokemones por region */
 

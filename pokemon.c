@@ -321,6 +321,12 @@ void insert_map_region(Pokedex *pokedex, HashMap *map_region){
         pushBack(list_region, pokedex);
         insertMap(map_region, pokedex->region, list_region);
     }else{
+        Pokedex* aux = firstList(list);
+        char* nombre = pokedex->nombre;
+        while(aux){
+            if(strcmp(aux->nombre, nombre) == 0) return;
+            else aux = nextList(list);
+        }
         pushBack(list, pokedex);
     }
 
@@ -371,12 +377,18 @@ void leer_mapa_pokemon(HashMap *map_pokemon){
     Pokemon *pokemon;
     while(list_nombres){
         pokemon = firstList(list_nombres);
-        printf("- %s -\n", pokemon->nombre);
-        while(pokemon){
-            printf("%s %d %d %s \n", pokemon->id, pokemon->pc, pokemon->ps, pokemon->sexo);
-            pokemon = nextList(list_nombres);
+        if(pokemon == NULL){
+            printf("No existe.\n");
+            break;
         }
-        list_nombres = nextMap(map_pokemon);
+        else{
+            printf("- %s -\n", pokemon->nombre);
+            while(pokemon){
+                printf("%s %d %d %s \n", pokemon->id, pokemon->pc, pokemon->ps, pokemon->sexo);
+                pokemon = nextList(list_nombres);
+            }
+            list_nombres = nextMap(map_pokemon);
+        }
     }
 
 }
@@ -439,11 +451,12 @@ void leer_list_numpokedex(List *list_num_pokedex){
 void buscar_nombre_pokemon(HashMap *map_pokemon, char *nombre){
 
     List *list_pokemon = searchMap(map_pokemon, nombre);
-    if (list_pokemon == NULL){
+    Pokemon *pokemon = firstList(list_pokemon);
+    if (list_pokemon == NULL || pokemon == NULL){
         printf("El pokemon buscado no existe.\n");
         return;
     }
-    Pokemon *pokemon = firstList(list_pokemon);
+    
     printf("\n- Informacion de combate del pokemon: %s \n", pokemon->nombre);
     while(pokemon){
         printf("%s %d %d %s\n", pokemon->id, pokemon->pc, pokemon->ps, pokemon->sexo);
@@ -497,18 +510,95 @@ void buscar_region(HashMap *map_region, char *region){
     }
 
     Pokedex *pokedex = firstList(list_pokemon);
-    printf("- Informacion de combate del pokemon: %s \n", region);
-    while(pokedex){
-        printf("%s %d ", pokedex->nombre, pokedex->existencia);
-
-        List *list_tipos = pokedex->tipos;
-        char *tipo = firstList(list_tipos);
-        while(tipo){
-            printf("%s ", tipo);
-            tipo = nextList(list_tipos);
-        }
-        printf("%s %s %d \n", pokedex->ev_prev, pokedex->ev_post, pokedex->num_pokedex);
+    int cont = 0;
+    while(pokedex)
+    {
+        cont += pokedex->existencia;
         pokedex = nextList(list_pokemon);
     }
+
+    pokedex = firstList(list_pokemon);
+
+    printf("Tienes %i pokemones de la region '%s' en tu almacenamiento:\n", cont, region);
+    while(pokedex){
+        if(pokedex->existencia > 0){
+            printf("%s %d ", pokedex->nombre, pokedex->existencia);
+
+            List *list_tipos = pokedex->tipos;
+            char *tipo = firstList(list_tipos);
+            while(tipo)
+            {
+                printf("%s ", tipo);
+                tipo = nextList(list_tipos);
+            }
+            printf("%s %s %d \n", pokedex->ev_prev, pokedex->ev_post, pokedex->num_pokedex);
+        }
+        pokedex = nextList(list_pokemon);
+    }
+
+}
+
+void liberar_pokemon(List *list_pc, HashMap *map_pokedex, HashMap *map_pokemon, HashMap *map_id, HashMap *map_tipo, HashMap *map_region){
+
+    int int_id;
+    char id[3];
+    printf("Ingrese el ID del pokemon a eliminar: ");
+    scanf("%i", &int_id);
+    sprintf(id, "%d", int_id);
+    
+    Pokemon* pokemon = searchMap(map_id, id);
+    char* nombre = pokemon->nombre;
+
+    Pokedex* pokedex = searchMap(map_pokedex, nombre);
+    pokedex->existencia--;
+    Pokedex* borrado2 = pokedex;
+    
+    eraseMap(map_id, id);
+    
+    List* lista = searchMap(map_pokemon, nombre);
+    pokemon = firstList(lista);
+    while(pokemon)
+    {
+        if(strcmp(pokemon->id, id) == 0){
+            popCurrent(lista);
+            break;
+        }
+        else pokemon = nextList(lista);
+    }
+
+    pokemon = firstList(list_pc);
+    while(pokemon)
+    {
+        if(strcmp(pokemon->nombre, nombre) == 0){
+            popCurrent(list_pc);
+            break;
+        }
+        else pokemon = nextList(list_pc);
+    }
+
+    char* tipo = firstList(borrado2->tipos);
+
+    while(tipo)
+    {
+        lista = searchMap(map_tipo, tipo);
+        pokemon = firstList(lista);
+        while(pokemon)
+        {
+            if(strcmp(pokemon->id, id) == 0){
+                popCurrent(lista);
+                break;
+            }
+            else pokemon = nextList(lista);
+        }
+
+        tipo = nextList(borrado2->tipos);
+    }
+
+    //leer_mapa_id(map_id);
+    //leer_mapa_pokemon(map_pokemon);
+    //leer_list_pokemon(list_pc);
+    //leer_mapa_pokedex(map_pokedex);
+    //leer_mapa_region(map_region);
+    //leer_mapa_tipos(map_tipo);
 
 }
